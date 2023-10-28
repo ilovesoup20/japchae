@@ -15,6 +15,6 @@ var tasks = []Task{
 	{ID: 2, Title: "Exercise", Done: false},
 }
 
-func Hello(c *fiber.Ctx) error {
+func TaskList(c *fiber.Ctx) error {
 	return c.JSON(tasks)
 }
