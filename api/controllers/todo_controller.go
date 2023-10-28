@@ -18,13 +18,14 @@ var todos = []Todo{
 }
 
 func ListTodo(c *fiber.Ctx) error {
+	fmt.Println("1" == "1")
 	return c.JSON(todos)
 }
 
 func GetTodoByID(c *fiber.Ctx) error {
-	id := c.Params("id")
+	id, _ := c.ParamsInt("id")
 	for _, todo := range todos {
-		if id == string(todo.ID) {
+		if id == todo.ID {
 			return c.JSON(todo)
 		}
 	}
@@ -48,7 +49,7 @@ func CreateTodo(c *fiber.Ctx) error {
 }
 
 func UpdateTodo(c *fiber.Ctx) error {
-	id := c.Params("id")
+	id, _ := c.ParamsInt("id")
 	var updatedTodo Todo
 	if err := c.BodyParser(&updatedTodo); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
@@ -57,7 +58,7 @@ func UpdateTodo(c *fiber.Ctx) error {
 	}
 
 	for i, todo := range todos {
-		if id == string(todo.ID) {
+		if id == todo.ID {
 			todos[i] = updatedTodo
 			return c.JSON(updatedTodo)
 		}
@@ -68,7 +69,7 @@ func UpdateTodo(c *fiber.Ctx) error {
 }
 
 func PatchTodo(c *fiber.Ctx) error {
-	id := c.Params("id")
+	id, _ := c.ParamsInt("id")
 	var patchedTodo Todo
 
 	if err := c.BodyParser(&patchedTodo); err != nil {
@@ -85,9 +86,9 @@ func PatchTodo(c *fiber.Ctx) error {
 }
 
 func DeleteTodoById(c *fiber.Ctx) error {
-	id := c.Params("id")
+	id, _ := c.ParamsInt("id")
 	for i, todo := range todos {
-		if id == string(todo.ID) {
+		if id == todo.ID {
 			todos = append(todos[:i], todos[i+1:]...)
 			return c.Status(fiber.StatusNoContent).Send(nil)
 		}
