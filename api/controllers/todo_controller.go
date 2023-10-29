@@ -26,21 +26,56 @@ func NewTodoController(client *ent.Client) *TodoController {
 	return &TodoController{Client: client}
 }
 
-// GetByID .
-func (c *TodoController) GetByID(ctx *fiber.Ctx) error {
-	id, _ := ctx.ParamsInt("id")
-
-	entTodo, err := c.Client.Todo.Get(context.Background(), id)
+// List .
+func (c *TodoController) List(fctx *fiber.Ctx) error {
+	ctx := context.Background()
+	dbTodos, err := c.Client.Todo.Query().All(ctx)
 
 	if err != nil {
-		return ctx.Status(fiber.StatusNotFound).SendString("Todo not found")
+		return fctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"message": fmt.Sprint(err),
+		})
+	}
+
+	todos := make([]Todo, len(dbTodos))
+
+	// var todo Todo
+	// if err := mapstructure.Decode(entTodo, &todo); err != nil {
+	// 	return fiberCtx.Status(fiber.StatusInternalServerError).SendString("Mapping failed")
+	// }
+	for i, todo := range dbTodos {
+		err := mapstructure.Decode(todo, &todos[i])
+		if err != nil {
+			fmt.Println("mapping error")
+		}
+		// todos[i] = Todo{
+		// 	ID:    todo.ID,
+		// 	Title: todo.Title,
+		// 	Done:  todo.Done,
+		// }
+	}
+	return fctx.JSON(todos)
+}
+
+// GetByID .
+func (c *TodoController) GetByID(fiberCtx *fiber.Ctx) error {
+	id, _ := fiberCtx.ParamsInt("id")
+
+	ctx := context.Background()
+
+	entTodo, err := c.Client.Todo.Get(ctx, id)
+
+	c.Client.Todo.Create().Save(ctx)
+
+	if err != nil {
+		return fiberCtx.Status(fiber.StatusNotFound).SendString("Todo not found")
 	}
 
 	var todo Todo
 	if err := mapstructure.Decode(entTodo, &todo); err != nil {
-		return ctx.Status(fiber.StatusInternalServerError).SendString("Mapping failed")
+		return fiberCtx.Status(fiber.StatusInternalServerError).SendString("Mapping failed")
 	}
-	return ctx.JSON(todo)
+	return fiberCtx.JSON(todo)
 }
 
 // func (c *TodoController) CreateTodo(ctx *fiber.Ctx) error {

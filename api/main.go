@@ -14,10 +14,12 @@ func main() {
 	app := fiber.New()
 
 	dbClient, _ := database.InitDB()
+	defer dbClient.Close()
 
 	todoController := controllers.NewTodoController(dbClient)
 
-	app.Get("/todo2", todoController.GetByID)
+	app.Get("/todo2", todoController.List)
+	app.Get("/todo2/:id", todoController.GetByID)
 
 	routes.SetupRoutes(app)
 

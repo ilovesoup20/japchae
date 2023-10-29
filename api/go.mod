@@ -4,7 +4,9 @@ go 1.19
 
 require (
 	entgo.io/ent v0.12.4
+	github.com/go-sql-driver/mysql v1.7.1
 	github.com/gofiber/fiber/v2 v2.50.0
+	github.com/mitchellh/mapstructure v1.5.0
 )
 
 require (
@@ -22,7 +24,6 @@ require (
 	github.com/mattn/go-runewidth v0.0.15 // indirect
 	github.com/mattn/go-sqlite3 v1.14.17 // indirect
 	github.com/mitchellh/go-wordwrap v0.0.0-20150314170334-ad45545899c7 // indirect
-	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/rivo/uniseg v0.2.0 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasthttp v1.50.0 // indirect
