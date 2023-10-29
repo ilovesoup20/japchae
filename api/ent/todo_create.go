@@ -31,6 +31,14 @@ func (tc *TodoCreate) SetDone(b bool) *TodoCreate {
 	return tc
 }
 
+// SetNillableDone sets the "Done" field if the given value is not nil.
+func (tc *TodoCreate) SetNillableDone(b *bool) *TodoCreate {
+	if b != nil {
+		tc.SetDone(*b)
+	}
+	return tc
+}
+
 // Mutation returns the TodoMutation object of the builder.
 func (tc *TodoCreate) Mutation() *TodoMutation {
 	return tc.mutation
@@ -38,6 +46,7 @@ func (tc *TodoCreate) Mutation() *TodoMutation {
 
 // Save creates the Todo in the database.
 func (tc *TodoCreate) Save(ctx context.Context) (*Todo, error) {
+	tc.defaults()
 	return withHooks(ctx, tc.sqlSave, tc.mutation, tc.hooks)
 }
 
@@ -60,6 +69,14 @@ func (tc *TodoCreate) Exec(ctx context.Context) error {
 func (tc *TodoCreate) ExecX(ctx context.Context) {
 	if err := tc.Exec(ctx); err != nil {
 		panic(err)
+	}
+}
+
+// defaults sets the default values of the builder before save.
+func (tc *TodoCreate) defaults() {
+	if _, ok := tc.mutation.Done(); !ok {
+		v := todo.DefaultDone
+		tc.mutation.SetDone(v)
 	}
 }
 
@@ -126,6 +143,7 @@ func (tcb *TodoCreateBulk) Save(ctx context.Context) ([]*Todo, error) {
 	for i := range tcb.builders {
 		func(i int, root context.Context) {
 			builder := tcb.builders[i]
+			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*TodoMutation)
 				if !ok {

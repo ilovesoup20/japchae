@@ -39,6 +39,14 @@ func (tu *TodoUpdate) SetDone(b bool) *TodoUpdate {
 	return tu
 }
 
+// SetNillableDone sets the "Done" field if the given value is not nil.
+func (tu *TodoUpdate) SetNillableDone(b *bool) *TodoUpdate {
+	if b != nil {
+		tu.SetDone(*b)
+	}
+	return tu
+}
+
 // Mutation returns the TodoMutation object of the builder.
 func (tu *TodoUpdate) Mutation() *TodoMutation {
 	return tu.mutation
@@ -115,6 +123,14 @@ func (tuo *TodoUpdateOne) SetTitle(s string) *TodoUpdateOne {
 // SetDone sets the "Done" field.
 func (tuo *TodoUpdateOne) SetDone(b bool) *TodoUpdateOne {
 	tuo.mutation.SetDone(b)
+	return tuo
+}
+
+// SetNillableDone sets the "Done" field if the given value is not nil.
+func (tuo *TodoUpdateOne) SetNillableDone(b *bool) *TodoUpdateOne {
+	if b != nil {
+		tuo.SetDone(*b)
+	}
 	return tuo
 }
 

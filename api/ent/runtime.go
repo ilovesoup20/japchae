@@ -2,8 +2,19 @@
 
 package ent
 
+import (
+	"github.com/ilovesoup20/japchae/ent/schema"
+	"github.com/ilovesoup20/japchae/ent/todo"
+)
+
 // The init function reads all schema descriptors with runtime code
 // (default values, validators, hooks and policies) and stitches it
 // to their package variables.
 func init() {
+	todoFields := schema.Todo{}.Fields()
+	_ = todoFields
+	// todoDescDone is the schema descriptor for Done field.
+	todoDescDone := todoFields[1].Descriptor()
+	// todo.DefaultDone holds the default value on creation for the Done field.
+	todo.DefaultDone = todoDescDone.Default.(bool)
 }

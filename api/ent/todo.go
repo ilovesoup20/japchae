@@ -17,9 +17,9 @@ type Todo struct {
 	// ID of the ent.
 	ID int `json:"id,omitempty"`
 	// Title holds the value of the "Title" field.
-	Title string `json:"Title,omitempty"`
+	Title string `json:"title"`
 	// Done holds the value of the "Done" field.
-	Done         bool `json:"Done,omitempty"`
+	Done         bool `json:"done"`
 	selectValues sql.SelectValues
 }
 

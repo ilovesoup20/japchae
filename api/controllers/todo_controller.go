@@ -9,27 +9,20 @@ import (
 	"github.com/mitchellh/mapstructure"
 )
 
-// Todo .
-type Todo struct {
-	ID    int    `json:"id"`
-	Title string `json:"title"`
-	Done  bool   `json:"done"`
-}
-
 // TodoController .
 type TodoController struct {
-	Client *ent.Client
+	Client *ent.TodoClient
 }
 
 // NewTodoController .
-func NewTodoController(client *ent.Client) *TodoController {
+func NewTodoController(client *ent.TodoClient) *TodoController {
 	return &TodoController{Client: client}
 }
 
-// List .
-func (c *TodoController) List(fctx *fiber.Ctx) error {
+// ListTodos .
+func (c *TodoController) ListTodos(fctx *fiber.Ctx) error {
 	ctx := context.Background()
-	dbTodos, err := c.Client.Todo.Query().All(ctx)
+	dbTodos, err := c.Client.Query().All(ctx)
 
 	if err != nil {
 		return fctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
@@ -37,62 +30,68 @@ func (c *TodoController) List(fctx *fiber.Ctx) error {
 		})
 	}
 
-	todos := make([]Todo, len(dbTodos))
+	todos := make([]ent.Todo, len(dbTodos))
 
-	// var todo Todo
-	// if err := mapstructure.Decode(entTodo, &todo); err != nil {
-	// 	return fiberCtx.Status(fiber.StatusInternalServerError).SendString("Mapping failed")
-	// }
 	for i, todo := range dbTodos {
 		err := mapstructure.Decode(todo, &todos[i])
 		if err != nil {
 			fmt.Println("mapping error")
 		}
-		// todos[i] = Todo{
-		// 	ID:    todo.ID,
-		// 	Title: todo.Title,
-		// 	Done:  todo.Done,
-		// }
 	}
 	return fctx.JSON(todos)
 }
 
-// GetByID .
-func (c *TodoController) GetByID(fiberCtx *fiber.Ctx) error {
+// GetTodoByID .
+func (c *TodoController) GetTodoByID(fiberCtx *fiber.Ctx) error {
 	id, _ := fiberCtx.ParamsInt("id")
 
 	ctx := context.Background()
 
-	entTodo, err := c.Client.Todo.Get(ctx, id)
+	entTodo, err := c.Client.Get(ctx, id)
 
-	c.Client.Todo.Create().Save(ctx)
+	c.Client.Create().Save(ctx)
 
 	if err != nil {
 		return fiberCtx.Status(fiber.StatusNotFound).SendString("Todo not found")
 	}
 
-	var todo Todo
+	var todo ent.Todo
 	if err := mapstructure.Decode(entTodo, &todo); err != nil {
 		return fiberCtx.Status(fiber.StatusInternalServerError).SendString("Mapping failed")
 	}
 	return fiberCtx.JSON(todo)
 }
 
-// func (c *TodoController) CreateTodo(ctx *fiber.Ctx) error {
-// 	todo, err := c.Client.Todo.Create().Save(ctx)
+// CreateTodo .
+func (c *TodoController) CreateTodo(fiberCtx *fiber.Ctx) error {
+	var todo ent.Todo
+	if err := fiberCtx.BodyParser(&todo); err != nil {
+		return fiberCtx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"message": "Invalid request body",
+		})
+	}
+	fmt.Println(todo)
+	ctx := context.Background()
+	dbTodo, err := c.Client.
+		Create().
+		SetTitle(todo.Title).
+		Save(ctx)
 
-// 	if err != nil {
-// 		return nil, fmt.Errorf("Failed creating todo: %w", err)
-// 	}
+	if err != nil {
+		fmt.Println("error?")
+	}
 
-// 	fmt.Println("New Todo was created.")
-// 	return todo, nil
-// }
+	if err := mapstructure.Decode(dbTodo, &todo); err != nil {
+		return fiberCtx.Status(fiber.StatusInternalServerError).SendString("mapping failed")
+	}
+	fmt.Println(dbTodo)
+	return fiberCtx.JSON(dbTodo)
+}
 
 /*
  *	OLDDDDDDD
  */
-var todos = []Todo{
+var todos = []ent.Todo{
 	{ID: 1, Title: "Buy groceries", Done: false},
 	{ID: 2, Title: "Exercise", Done: false},
 }
@@ -119,7 +118,7 @@ func GetTodoByID(c *fiber.Ctx) error {
 
 // CreateTodo .
 func CreateTodo(c *fiber.Ctx) error {
-	var todo Todo
+	var todo ent.Todo
 	if err := c.BodyParser(&todo); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"message": "Invalid request body",
@@ -134,7 +133,7 @@ func CreateTodo(c *fiber.Ctx) error {
 // UpdateTodo .
 func UpdateTodo(c *fiber.Ctx) error {
 	id, _ := c.ParamsInt("id")
-	var updatedTodo Todo
+	var updatedTodo ent.Todo
 	if err := c.BodyParser(&updatedTodo); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"message": "Invalid request body",
@@ -155,7 +154,7 @@ func UpdateTodo(c *fiber.Ctx) error {
 // PatchTodo .
 func PatchTodo(c *fiber.Ctx) error {
 	id, _ := c.ParamsInt("id")
-	var patchedTodo Todo
+	var patchedTodo ent.Todo
 
 	if err := c.BodyParser(&patchedTodo); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{

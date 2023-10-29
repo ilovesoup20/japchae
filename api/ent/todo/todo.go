@@ -36,6 +36,11 @@ func ValidColumn(column string) bool {
 	return false
 }
 
+var (
+	// DefaultDone holds the default value on creation for the "Done" field.
+	DefaultDone bool
+)
+
 // OrderOption defines the ordering options for the Todo queries.
 type OrderOption func(*sql.Selector)
 
