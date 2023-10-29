@@ -52,87 +52,87 @@ func IDLTE(id int) predicate.Todo {
 	return predicate.Todo(sql.FieldLTE(FieldID, id))
 }
 
-// Title applies equality check predicate on the "title" field. It's identical to TitleEQ.
+// Title applies equality check predicate on the "Title" field. It's identical to TitleEQ.
 func Title(v string) predicate.Todo {
 	return predicate.Todo(sql.FieldEQ(FieldTitle, v))
 }
 
-// Done applies equality check predicate on the "done" field. It's identical to DoneEQ.
+// Done applies equality check predicate on the "Done" field. It's identical to DoneEQ.
 func Done(v bool) predicate.Todo {
 	return predicate.Todo(sql.FieldEQ(FieldDone, v))
 }
 
-// TitleEQ applies the EQ predicate on the "title" field.
+// TitleEQ applies the EQ predicate on the "Title" field.
 func TitleEQ(v string) predicate.Todo {
 	return predicate.Todo(sql.FieldEQ(FieldTitle, v))
 }
 
-// TitleNEQ applies the NEQ predicate on the "title" field.
+// TitleNEQ applies the NEQ predicate on the "Title" field.
 func TitleNEQ(v string) predicate.Todo {
 	return predicate.Todo(sql.FieldNEQ(FieldTitle, v))
 }
 
-// TitleIn applies the In predicate on the "title" field.
+// TitleIn applies the In predicate on the "Title" field.
 func TitleIn(vs ...string) predicate.Todo {
 	return predicate.Todo(sql.FieldIn(FieldTitle, vs...))
 }
 
-// TitleNotIn applies the NotIn predicate on the "title" field.
+// TitleNotIn applies the NotIn predicate on the "Title" field.
 func TitleNotIn(vs ...string) predicate.Todo {
 	return predicate.Todo(sql.FieldNotIn(FieldTitle, vs...))
 }
 
-// TitleGT applies the GT predicate on the "title" field.
+// TitleGT applies the GT predicate on the "Title" field.
 func TitleGT(v string) predicate.Todo {
 	return predicate.Todo(sql.FieldGT(FieldTitle, v))
 }
 
-// TitleGTE applies the GTE predicate on the "title" field.
+// TitleGTE applies the GTE predicate on the "Title" field.
 func TitleGTE(v string) predicate.Todo {
 	return predicate.Todo(sql.FieldGTE(FieldTitle, v))
 }
 
-// TitleLT applies the LT predicate on the "title" field.
+// TitleLT applies the LT predicate on the "Title" field.
 func TitleLT(v string) predicate.Todo {
 	return predicate.Todo(sql.FieldLT(FieldTitle, v))
 }
 
-// TitleLTE applies the LTE predicate on the "title" field.
+// TitleLTE applies the LTE predicate on the "Title" field.
 func TitleLTE(v string) predicate.Todo {
 	return predicate.Todo(sql.FieldLTE(FieldTitle, v))
 }
 
-// TitleContains applies the Contains predicate on the "title" field.
+// TitleContains applies the Contains predicate on the "Title" field.
 func TitleContains(v string) predicate.Todo {
 	return predicate.Todo(sql.FieldContains(FieldTitle, v))
 }
 
-// TitleHasPrefix applies the HasPrefix predicate on the "title" field.
+// TitleHasPrefix applies the HasPrefix predicate on the "Title" field.
 func TitleHasPrefix(v string) predicate.Todo {
 	return predicate.Todo(sql.FieldHasPrefix(FieldTitle, v))
 }
 
-// TitleHasSuffix applies the HasSuffix predicate on the "title" field.
+// TitleHasSuffix applies the HasSuffix predicate on the "Title" field.
 func TitleHasSuffix(v string) predicate.Todo {
 	return predicate.Todo(sql.FieldHasSuffix(FieldTitle, v))
 }
 
-// TitleEqualFold applies the EqualFold predicate on the "title" field.
+// TitleEqualFold applies the EqualFold predicate on the "Title" field.
 func TitleEqualFold(v string) predicate.Todo {
 	return predicate.Todo(sql.FieldEqualFold(FieldTitle, v))
 }
 
-// TitleContainsFold applies the ContainsFold predicate on the "title" field.
+// TitleContainsFold applies the ContainsFold predicate on the "Title" field.
 func TitleContainsFold(v string) predicate.Todo {
 	return predicate.Todo(sql.FieldContainsFold(FieldTitle, v))
 }
 
-// DoneEQ applies the EQ predicate on the "done" field.
+// DoneEQ applies the EQ predicate on the "Done" field.
 func DoneEQ(v bool) predicate.Todo {
 	return predicate.Todo(sql.FieldEQ(FieldDone, v))
 }
 
-// DoneNEQ applies the NEQ predicate on the "done" field.
+// DoneNEQ applies the NEQ predicate on the "Done" field.
 func DoneNEQ(v bool) predicate.Todo {
 	return predicate.Todo(sql.FieldNEQ(FieldDone, v))
 }

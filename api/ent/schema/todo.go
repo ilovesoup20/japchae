@@ -13,8 +13,8 @@ type Todo struct {
 // Fields of the Todo.
 func (Todo) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("title"),
-		field.Bool("done"),
+		field.String("Title"),
+		field.Bool("Done"),
 	}
 }
 

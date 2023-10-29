@@ -32,8 +32,8 @@ type TodoMutation struct {
 	op            Op
 	typ           string
 	id            *int
-	title         *string
-	_done         *bool
+	_Title        *string
+	_Done         *bool
 	clearedFields map[string]struct{}
 	done          bool
 	oldValue      func(context.Context) (*Todo, error)
@@ -138,21 +138,21 @@ func (m *TodoMutation) IDs(ctx context.Context) ([]int, error) {
 	}
 }
 
-// SetTitle sets the "title" field.
+// SetTitle sets the "Title" field.
 func (m *TodoMutation) SetTitle(s string) {
-	m.title = &s
+	m._Title = &s
 }
 
-// Title returns the value of the "title" field in the mutation.
+// Title returns the value of the "Title" field in the mutation.
 func (m *TodoMutation) Title() (r string, exists bool) {
-	v := m.title
+	v := m._Title
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldTitle returns the old "title" field's value of the Todo entity.
+// OldTitle returns the old "Title" field's value of the Todo entity.
 // If the Todo object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
 func (m *TodoMutation) OldTitle(ctx context.Context) (v string, err error) {
@@ -169,26 +169,26 @@ func (m *TodoMutation) OldTitle(ctx context.Context) (v string, err error) {
 	return oldValue.Title, nil
 }
 
-// ResetTitle resets all changes to the "title" field.
+// ResetTitle resets all changes to the "Title" field.
 func (m *TodoMutation) ResetTitle() {
-	m.title = nil
+	m._Title = nil
 }
 
-// SetDone sets the "done" field.
+// SetDone sets the "Done" field.
 func (m *TodoMutation) SetDone(b bool) {
-	m._done = &b
+	m._Done = &b
 }
 
-// Done returns the value of the "done" field in the mutation.
+// Done returns the value of the "Done" field in the mutation.
 func (m *TodoMutation) Done() (r bool, exists bool) {
-	v := m._done
+	v := m._Done
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldDone returns the old "done" field's value of the Todo entity.
+// OldDone returns the old "Done" field's value of the Todo entity.
 // If the Todo object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
 func (m *TodoMutation) OldDone(ctx context.Context) (v bool, err error) {
@@ -205,9 +205,9 @@ func (m *TodoMutation) OldDone(ctx context.Context) (v bool, err error) {
 	return oldValue.Done, nil
 }
 
-// ResetDone resets all changes to the "done" field.
+// ResetDone resets all changes to the "Done" field.
 func (m *TodoMutation) ResetDone() {
-	m._done = nil
+	m._Done = nil
 }
 
 // Where appends a list predicates to the TodoMutation builder.
@@ -245,10 +245,10 @@ func (m *TodoMutation) Type() string {
 // AddedFields().
 func (m *TodoMutation) Fields() []string {
 	fields := make([]string, 0, 2)
-	if m.title != nil {
+	if m._Title != nil {
 		fields = append(fields, todo.FieldTitle)
 	}
-	if m._done != nil {
+	if m._Done != nil {
 		fields = append(fields, todo.FieldDone)
 	}
 	return fields

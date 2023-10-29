@@ -43,6 +43,20 @@ func (c *TodoController) GetByID(ctx *fiber.Ctx) error {
 	return ctx.JSON(todo)
 }
 
+// func (c *TodoController) CreateTodo(ctx *fiber.Ctx) error {
+// 	todo, err := c.Client.Todo.Create().Save(ctx)
+
+// 	if err != nil {
+// 		return nil, fmt.Errorf("Failed creating todo: %w", err)
+// 	}
+
+// 	fmt.Println("New Todo was created.")
+// 	return todo, nil
+// }
+
+/*
+ *	OLDDDDDDD
+ */
 var todos = []Todo{
 	{ID: 1, Title: "Buy groceries", Done: false},
 	{ID: 2, Title: "Exercise", Done: false},

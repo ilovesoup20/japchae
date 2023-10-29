@@ -19,13 +19,13 @@ type TodoCreate struct {
 	hooks    []Hook
 }
 
-// SetTitle sets the "title" field.
+// SetTitle sets the "Title" field.
 func (tc *TodoCreate) SetTitle(s string) *TodoCreate {
 	tc.mutation.SetTitle(s)
 	return tc
 }
 
-// SetDone sets the "done" field.
+// SetDone sets the "Done" field.
 func (tc *TodoCreate) SetDone(b bool) *TodoCreate {
 	tc.mutation.SetDone(b)
 	return tc
@@ -66,10 +66,10 @@ func (tc *TodoCreate) ExecX(ctx context.Context) {
 // check runs all checks and user-defined validators on the builder.
 func (tc *TodoCreate) check() error {
 	if _, ok := tc.mutation.Title(); !ok {
-		return &ValidationError{Name: "title", err: errors.New(`ent: missing required field "Todo.title"`)}
+		return &ValidationError{Name: "Title", err: errors.New(`ent: missing required field "Todo.Title"`)}
 	}
 	if _, ok := tc.mutation.Done(); !ok {
-		return &ValidationError{Name: "done", err: errors.New(`ent: missing required field "Todo.done"`)}
+		return &ValidationError{Name: "Done", err: errors.New(`ent: missing required field "Todo.Done"`)}
 	}
 	return nil
 }

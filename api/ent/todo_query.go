@@ -261,7 +261,7 @@ func (tq *TodoQuery) Clone() *TodoQuery {
 // Example:
 //
 //	var v []struct {
-//		Title string `json:"title,omitempty"`
+//		Title string `json:"Title,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
@@ -284,7 +284,7 @@ func (tq *TodoQuery) GroupBy(field string, fields ...string) *TodoGroupBy {
 // Example:
 //
 //	var v []struct {
-//		Title string `json:"title,omitempty"`
+//		Title string `json:"Title,omitempty"`
 //	}
 //
 //	client.Todo.Query().

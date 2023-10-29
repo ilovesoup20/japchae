@@ -27,13 +27,13 @@ func (tu *TodoUpdate) Where(ps ...predicate.Todo) *TodoUpdate {
 	return tu
 }
 
-// SetTitle sets the "title" field.
+// SetTitle sets the "Title" field.
 func (tu *TodoUpdate) SetTitle(s string) *TodoUpdate {
 	tu.mutation.SetTitle(s)
 	return tu
 }
 
-// SetDone sets the "done" field.
+// SetDone sets the "Done" field.
 func (tu *TodoUpdate) SetDone(b bool) *TodoUpdate {
 	tu.mutation.SetDone(b)
 	return tu
@@ -106,13 +106,13 @@ type TodoUpdateOne struct {
 	mutation *TodoMutation
 }
 
-// SetTitle sets the "title" field.
+// SetTitle sets the "Title" field.
 func (tuo *TodoUpdateOne) SetTitle(s string) *TodoUpdateOne {
 	tuo.mutation.SetTitle(s)
 	return tuo
 }
 
-// SetDone sets the "done" field.
+// SetDone sets the "Done" field.
 func (tuo *TodoUpdateOne) SetDone(b bool) *TodoUpdateOne {
 	tuo.mutation.SetDone(b)
 	return tuo

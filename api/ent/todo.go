@@ -16,10 +16,10 @@ type Todo struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID int `json:"id,omitempty"`
-	// Title holds the value of the "title" field.
-	Title string `json:"title,omitempty"`
-	// Done holds the value of the "done" field.
-	Done         bool `json:"done,omitempty"`
+	// Title holds the value of the "Title" field.
+	Title string `json:"Title,omitempty"`
+	// Done holds the value of the "Done" field.
+	Done         bool `json:"Done,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -57,13 +57,13 @@ func (t *Todo) assignValues(columns []string, values []any) error {
 			t.ID = int(value.Int64)
 		case todo.FieldTitle:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field title", values[i])
+				return fmt.Errorf("unexpected type %T for field Title", values[i])
 			} else if value.Valid {
 				t.Title = value.String
 			}
 		case todo.FieldDone:
 			if value, ok := values[i].(*sql.NullBool); !ok {
-				return fmt.Errorf("unexpected type %T for field done", values[i])
+				return fmt.Errorf("unexpected type %T for field Done", values[i])
 			} else if value.Valid {
 				t.Done = value.Bool
 			}
@@ -103,10 +103,10 @@ func (t *Todo) String() string {
 	var builder strings.Builder
 	builder.WriteString("Todo(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", t.ID))
-	builder.WriteString("title=")
+	builder.WriteString("Title=")
 	builder.WriteString(t.Title)
 	builder.WriteString(", ")
-	builder.WriteString("done=")
+	builder.WriteString("Done=")
 	builder.WriteString(fmt.Sprintf("%v", t.Done))
 	builder.WriteByte(')')
 	return builder.String()

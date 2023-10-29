@@ -44,12 +44,12 @@ func ByID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldID, opts...).ToFunc()
 }
 
-// ByTitle orders the results by the title field.
+// ByTitle orders the results by the Title field.
 func ByTitle(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldTitle, opts...).ToFunc()
 }
 
-// ByDone orders the results by the done field.
+// ByDone orders the results by the Done field.
 func ByDone(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDone, opts...).ToFunc()
 }
