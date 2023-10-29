@@ -5,6 +5,7 @@ import (
 	"github.com/ilovesoup20/japchae/controllers"
 )
 
+// SetupRoutes blah
 func SetupRoutes(app *fiber.App) {
 
 	app.Get("/hello", controllers.Hello)
@@ -16,4 +17,5 @@ func SetupRoutes(app *fiber.App) {
 	app.Put("/todo/:id", controllers.UpdateTodo)
 	app.Patch("/todo/:id", controllers.PatchTodo)
 	app.Delete("/todo/:id", controllers.DeleteTodoByID)
+
 }

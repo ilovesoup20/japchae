@@ -1,15 +1,46 @@
 package controllers
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/ilovesoup20/japchae/ent"
+	"github.com/mitchellh/mapstructure"
 )
 
+// Todo .
 type Todo struct {
 	ID    int    `json:"id"`
 	Title string `json:"title"`
 	Done  bool   `json:"done"`
+}
+
+// TodoController .
+type TodoController struct {
+	Client *ent.Client
+}
+
+// NewTodoController .
+func NewTodoController(client *ent.Client) *TodoController {
+	return &TodoController{Client: client}
+}
+
+// GetByID .
+func (c *TodoController) GetByID(ctx *fiber.Ctx) error {
+	id, _ := ctx.ParamsInt("id")
+
+	entTodo, err := c.Client.Todo.Get(context.Background(), id)
+
+	if err != nil {
+		return ctx.Status(fiber.StatusNotFound).SendString("Todo not found")
+	}
+
+	var todo Todo
+	if err := mapstructure.Decode(entTodo, &todo); err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).SendString("Mapping failed")
+	}
+	return ctx.JSON(todo)
 }
 
 var todos = []Todo{
@@ -17,12 +48,13 @@ var todos = []Todo{
 	{ID: 2, Title: "Exercise", Done: false},
 }
 
+// ListTodo .
 func ListTodo(c *fiber.Ctx) error {
 	fmt.Println("1" == "1")
 	return c.JSON(todos)
 }
 
-// GetTodoByID blah
+// GetTodoByID .
 func GetTodoByID(c *fiber.Ctx) error {
 	id, _ := c.ParamsInt("id")
 	for _, todo := range todos {
@@ -36,7 +68,7 @@ func GetTodoByID(c *fiber.Ctx) error {
 	})
 }
 
-// CreateTodo blah
+// CreateTodo .
 func CreateTodo(c *fiber.Ctx) error {
 	var todo Todo
 	if err := c.BodyParser(&todo); err != nil {
@@ -50,7 +82,7 @@ func CreateTodo(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusCreated).JSON(todo)
 }
 
-// UpdateTodo blah
+// UpdateTodo .
 func UpdateTodo(c *fiber.Ctx) error {
 	id, _ := c.ParamsInt("id")
 	var updatedTodo Todo
@@ -71,7 +103,7 @@ func UpdateTodo(c *fiber.Ctx) error {
 	})
 }
 
-// PatchTodo blah
+// PatchTodo .
 func PatchTodo(c *fiber.Ctx) error {
 	id, _ := c.ParamsInt("id")
 	var patchedTodo Todo
@@ -89,7 +121,7 @@ func PatchTodo(c *fiber.Ctx) error {
 	})
 }
 
-// DeleteTodoByID blah
+// DeleteTodoByID .
 func DeleteTodoByID(c *fiber.Ctx) error {
 	id, _ := c.ParamsInt("id")
 	for i, todo := range todos {
