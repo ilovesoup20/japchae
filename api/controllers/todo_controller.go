@@ -11,18 +11,18 @@ import (
 
 // TodoController .
 type TodoController struct {
-	Client *ent.TodoClient
+	Todo *ent.TodoClient
 }
 
 // NewTodoController .
 func NewTodoController(client *ent.TodoClient) *TodoController {
-	return &TodoController{Client: client}
+	return &TodoController{Todo: client}
 }
 
 // ListTodos .
 func (c *TodoController) ListTodos(fctx *fiber.Ctx) error {
 	ctx := context.Background()
-	dbTodos, err := c.Client.Query().All(ctx)
+	dbTodos, err := c.Todo.Query().All(ctx)
 
 	if err != nil {
 		return fctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
@@ -47,9 +47,7 @@ func (c *TodoController) GetTodoByID(fiberCtx *fiber.Ctx) error {
 
 	ctx := context.Background()
 
-	entTodo, err := c.Client.Get(ctx, id)
-
-	c.Client.Create().Save(ctx)
+	entTodo, err := c.Todo.Get(ctx, id)
 
 	if err != nil {
 		return fiberCtx.Status(fiber.StatusNotFound).SendString("Todo not found")
@@ -70,9 +68,9 @@ func (c *TodoController) CreateTodo(fiberCtx *fiber.Ctx) error {
 			"message": "Invalid request body",
 		})
 	}
-	fmt.Println(todo)
+
 	ctx := context.Background()
-	dbTodo, err := c.Client.
+	dbTodo, err := c.Todo.
 		Create().
 		SetTitle(todo.Title).
 		Save(ctx)
@@ -84,7 +82,27 @@ func (c *TodoController) CreateTodo(fiberCtx *fiber.Ctx) error {
 	if err := mapstructure.Decode(dbTodo, &todo); err != nil {
 		return fiberCtx.Status(fiber.StatusInternalServerError).SendString("mapping failed")
 	}
-	fmt.Println(dbTodo)
+
+	return fiberCtx.JSON(dbTodo)
+}
+
+func (c *TodoController) UpdateTodo(fiberCtx *fiber.Ctx) error {
+	id, _ := fiberCtx.ParamsInt("id")
+
+	var todo ent.Todo
+	if err := fiberCtx.BodyParser(&todo); err != nil {
+		return fiberCtx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"message": "Invalid request body",
+		})
+	}
+
+	todo.Update()
+	ctx := context.Background()
+	dbTodo, err := c.Todo.Get(ctx, id)
+
+	if err != nil {
+		return fiberCtx.Status(fiber.StatusNotFound).SendString("todo not found")
+	}
 	return fiberCtx.JSON(dbTodo)
 }
 

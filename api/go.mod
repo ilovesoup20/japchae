@@ -4,9 +4,11 @@ go 1.19
 
 require (
 	entgo.io/ent v0.12.4
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/go-sql-driver/mysql v1.7.1
 	github.com/gofiber/fiber/v2 v2.50.0
 	github.com/mitchellh/mapstructure v1.5.0
+	golang.org/x/crypto v0.7.0
 )
 
 require (

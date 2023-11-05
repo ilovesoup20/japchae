@@ -13,11 +13,8 @@ type Todo struct {
 // Fields of the Todo.
 func (Todo) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("Title").
-			StructTag(`json:"title"`),
-		field.Bool("Done").
-			StructTag(`json:"done"`).
-			Default(false),
+		field.String("Title").StructTag(`json:"title"`),
+		field.Bool("Done").StructTag(`json:"done"`).Default(false),
 	}
 }
 
