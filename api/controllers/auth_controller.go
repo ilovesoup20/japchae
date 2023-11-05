@@ -7,18 +7,11 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/ilovesoup20/japchae/auth"
+	"github.com/ilovesoup20/japchae/model"
 	"golang.org/x/crypto/bcrypt"
 )
 
-// User .
-type User struct {
-	ID       uint   `gorm:"primaryKey"`
-	Username string `gorm:"unique"`
-	Password string
-	Salt     string
-}
-
-var users = map[string]User{
+var users = map[string]model.User{
 	"john": {
 		Username: "john",
 	},
@@ -64,7 +57,7 @@ func Login(c *fiber.Ctx) error {
 
 // RegisterUser .
 func RegisterUser(c *fiber.Ctx) error {
-	var newUser User
+	var newUser model.User
 	if err := c.BodyParser(&newUser); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": "Invalid request data",
