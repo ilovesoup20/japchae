@@ -1,16 +1,27 @@
 package controllers
 
 import (
+	"log"
+
 	"github.com/gofiber/fiber/v2"
+	"github.com/ilovesoup20/japchae/auth"
 	"golang.org/x/crypto/bcrypt"
 )
 
-func Authenticate() {
-
+type User struct {
+	Username string // Unique username
+	Password string // Hashed password
 }
 
-func Authorize() {
-
+var users = map[string]User{
+	"john": {
+		Username: "john",
+		Password: hashPassword("password123"),
+	},
+	"jane": {
+		Username: "jane",
+		Password: hashPassword("securepass"),
+	},
 }
 
 func Login(c *fiber.Ctx) error {
@@ -32,25 +43,25 @@ func Login(c *fiber.Ctx) error {
 		})
 	}
 
-	token, err := generateJWT(username)
+	token, err := auth.GenerateToken(username)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"message": "Failed to generate JWT token",
 		})
 	}
 
-	return c.Status(fiber.StatsOK).JSON(fiber.Map{
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
 		"token": token,
 	})
 }
 
-func HashPassword(password string) (string, error) {
+func hashPassword(password string) string {
 	hashedPw, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
-		return "", err
+		log.Fatal(err)
 	}
 
-	return string(hashedPw), nil
+	return string(hashedPw)
 }
 func verifyPassword(hashedPassword, password string) error {
 	return bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
