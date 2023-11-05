@@ -9,6 +9,8 @@ require (
 	github.com/gofiber/fiber/v2 v2.50.0
 	github.com/mitchellh/mapstructure v1.5.0
 	golang.org/x/crypto v0.7.0
+	gorm.io/driver/mysql v1.5.2
+	gorm.io/gorm v1.25.5
 )
 
 require (
@@ -36,5 +38,4 @@ require (
 	golang.org/x/mod v0.10.0 // indirect
 	golang.org/x/sys v0.13.0 // indirect
 	golang.org/x/text v0.8.0 // indirect
-	gorm.io/gorm v1.25.5 // indirect
 )

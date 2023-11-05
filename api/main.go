@@ -10,10 +10,13 @@ func main() {
 
 	app := fiber.New()
 
-	dbClient, _ := database.InitDB()
-	defer dbClient.Close()
+	entClient, _ := database.InitEntDB()
+	defer entClient.Close()
 
-	routes.SetupRoutes(app, dbClient)
+	gormClient, _ := database.InitGormDB()
+	// defer gormClient.Close()
+
+	routes.SetupRoutes(app, entClient, gormClient)
 
 	app.Listen(":3000")
 }

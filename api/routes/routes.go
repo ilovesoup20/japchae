@@ -4,14 +4,19 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/ilovesoup20/japchae/controllers"
 	"github.com/ilovesoup20/japchae/ent"
+	"github.com/ilovesoup20/japchae/repository"
+	"gorm.io/gorm"
 )
 
 // SetupRoutes blah
-func SetupRoutes(app *fiber.App, entClient *ent.Client) {
+func SetupRoutes(app *fiber.App, entClient *ent.Client, gormClient *gorm.DB) {
 
 	app.Get("/hello", controllers.Hello)
 
-	app.Post("/auth", controllers.Login)
+	userRepo := repository.UserRepositoryImpl{DB: gormClient}
+	authController := controllers.NewAuthController(&userRepo)
+	app.Post("/login", authController.Login)
+	app.Post("/register", authController.RegisterUser)
 
 	// TODO
 	todoController := controllers.NewTodoController(entClient.Todo)

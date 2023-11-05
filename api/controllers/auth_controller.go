@@ -8,6 +8,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/ilovesoup20/japchae/auth"
 	"github.com/ilovesoup20/japchae/model"
+	"github.com/ilovesoup20/japchae/repository"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -23,8 +24,16 @@ var users = map[string]model.User{
 	},
 }
 
+type AuthController struct {
+	User *repository.UserRepositoryImpl
+}
+
+func NewAuthController(userRepository *repository.UserRepositoryImpl) *AuthController {
+	return &AuthController{User: userRepository}
+}
+
 // Login .
-func Login(c *fiber.Ctx) error {
+func (ac *AuthController) Login(c *fiber.Ctx) error {
 	username := c.FormValue("username")
 	password := c.FormValue("password")
 
@@ -56,7 +65,7 @@ func Login(c *fiber.Ctx) error {
 }
 
 // RegisterUser .
-func RegisterUser(c *fiber.Ctx) error {
+func (ac *AuthController) RegisterUser(c *fiber.Ctx) error {
 	var newUser model.User
 	if err := c.BodyParser(&newUser); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
@@ -70,11 +79,11 @@ func RegisterUser(c *fiber.Ctx) error {
 	hashedPassword := hashPassword(newUser.Password, salt)
 	newUser.Password = hashedPassword
 
-	result := db.Create(&newUser)
+	error := ac.User.Create(&newUser)
 
-	if result.Error != nil {
+	if error != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": result.Error.error(),
+			"error": "error", // result.Error.error(),
 		})
 	}
 
