@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"crypto/rand"
+	"encoding/base64"
 	"log"
 
 	"github.com/gofiber/fiber/v2"
@@ -8,22 +10,27 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+// User .
 type User struct {
-	Username string // Unique username
-	Password string // Hashed password
+	ID       uint   `gorm:"primaryKey"`
+	Username string `gorm:"unique"`
+	Password string
+	Salt     string
 }
 
 var users = map[string]User{
 	"john": {
 		Username: "john",
-		Password: hashPassword("password123"),
 	},
 	"jane": {
 		Username: "jane",
-		Password: hashPassword("securepass"),
+	},
+	"charles": {
+		Username: "charles",
 	},
 }
 
+// Login .
 func Login(c *fiber.Ctx) error {
 	username := c.FormValue("username")
 	password := c.FormValue("password")
@@ -43,7 +50,7 @@ func Login(c *fiber.Ctx) error {
 		})
 	}
 
-	token, err := auth.GenerateToken(username)
+	token, err := auth.GenerateToken()
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"message": "Failed to generate JWT token",
@@ -55,13 +62,54 @@ func Login(c *fiber.Ctx) error {
 	})
 }
 
-func hashPassword(password string) string {
-	hashedPw, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+// RegisterUser .
+func RegisterUser(c *fiber.Ctx) error {
+	var newUser User
+	if err := c.BodyParser(&newUser); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "Invalid request data",
+		})
+	}
+
+	salt := generateSalt()
+	newUser.Salt = salt
+
+	hashedPassword := hashPassword(newUser.Password, salt)
+	newUser.Password = hashedPassword
+
+	result := db.Create(&newUser)
+
+	if result.Error != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": result.Error.error(),
+		})
+	}
+
+	return c.Status(fiber.StatusCreated).JSON(newUser)
+}
+
+func generateSalt() string {
+	salt := make([]byte, 16)
+	if _, err := rand.Read(salt); err != nil {
+		log.Fatal(err)
+	}
+	return base64.StdEncoding.EncodeToString(salt)
+}
+
+func hashPassword(password, salt string) string {
+	saltedPassword := []byte(password + salt)
+	hashedPassword, err := bcrypt.GenerateFromPassword(saltedPassword, bcrypt.DefaultCost)
+
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	return string(hashedPw)
+	return string(hashedPassword)
+}
+
+func validatePassword(inputPassword, storedHashedPassword, salt string) bool {
+	hashedInputPassword := hashPassword(inputPassword, salt)
+	return hashedInputPassword == storedHashedPassword
 }
 func verifyPassword(hashedPassword, password string) error {
 	return bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))

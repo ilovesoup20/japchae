@@ -11,6 +11,8 @@ func SetupRoutes(app *fiber.App, entClient *ent.Client) {
 
 	app.Get("/hello", controllers.Hello)
 
+	app.Post("/auth", controllers.Login)
+
 	// TODO
 	todoController := controllers.NewTodoController(entClient.Todo)
 	app.Get("/todo", todoController.ListTodos)
