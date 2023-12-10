@@ -1,0 +1,22 @@
+version: '3'
+
+vars:
+  PROJECT_NAME: japchae
+  AWS_ACCOUNT_ID:
+    sh: aws sts get-caller-identity  | jq -r .Account
+  AWS_REGION:
+    sh: aws configure get region
+
+tasks:
+  build:
+    cmds:
+      - go build
+  run:
+    cmds:
+      - go run main.go
+  docker-build:
+    cmds:
+      - docker build -t {{.PROJECT_NAME}} .
+  foo:
+    cmds:
+      - echo {{.AWS_ACCOUNT_ID}} {{.AWS_REGION}}
