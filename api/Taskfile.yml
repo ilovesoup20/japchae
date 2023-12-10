@@ -2,10 +2,12 @@ version: '3'
 
 vars:
   PROJECT_NAME: japchae
+  ECR_REPOSITORY: japchae-repository
   AWS_ACCOUNT_ID:
     sh: aws sts get-caller-identity  | jq -r .Account
   AWS_REGION:
     sh: aws configure get region
+  ECR_HOST: "{{.AWS_ACCOUNT_ID}}.dkr.ecr.{{.AWS_REGION}}.amazonaws.com/{{.ECR_REPOSITORY}}"
 
 tasks:
   build:
@@ -14,9 +16,20 @@ tasks:
   run:
     cmds:
       - go run main.go
+
+# DOCKER
   docker-build:
     cmds:
       - docker build -t {{.PROJECT_NAME}} .
+
+  docker-tag:
+    cmds:
+      - docker tag {{.PROJECT_NAME}}:latest {{.ECR_HOST}}
+  
+  docker-push:
+    cmds:
+      - docker push {{.ECR_HOST}}
+
   foo:
     cmds:
       - echo {{.AWS_ACCOUNT_ID}} {{.AWS_REGION}}
