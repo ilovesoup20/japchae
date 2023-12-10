@@ -11,7 +11,7 @@ type UserRepository interface {
 	// ReadByID(userID int) (model.User, error)
 	// Update(user model.User) error
 	// Delete(userID int) error
-	// FindAll() ([]model.User, error)
+	FindAll() ([]model.User, error)
 }
 
 // UserRepositoryImpl .
@@ -42,6 +42,8 @@ func (r *UserRepositoryImpl) Create(user *model.User) error {
 
 // }
 
-// func (r *UserRepositoryImpl) FindAll() ([]model.User, error) {
-
-// }
+func (r *UserRepositoryImpl) FindAll() ([]model.User, error) {
+	var users []model.User
+	r.DB.Find(&users)
+	return users, nil
+}

@@ -18,6 +18,9 @@ func SetupRoutes(app *fiber.App, entClient *ent.Client, gormClient *gorm.DB) {
 	app.Post("/login", authController.Login)
 	app.Post("/register", authController.RegisterUser)
 
+	userController := controllers.NewUserController(&userRepo)
+	app.Get("/user", userController.List)
+
 	// TODO
 	todoController := controllers.NewTodoController(entClient.Todo)
 	app.Get("/todo", todoController.ListTodos)
