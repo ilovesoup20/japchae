@@ -14,7 +14,7 @@ import (
 
 // InitEntDB .
 func InitEntDB() (*ent.Client, error) {
-	client, err := ent.Open("mysql", "root:password@tcp(localhost:3306)/japchae")
+	client, err := ent.Open("mysql", "root:password@tcp(host.docker.internal:3306)/japchae")
 	if err != nil {
 		log.Fatalf("Failed opening mysql connection %v", err)
 	}
@@ -28,7 +28,7 @@ func InitEntDB() (*ent.Client, error) {
 
 // InitGormDB .
 func InitGormDB() (*gorm.DB, error) {
-	dsn := "root:password@tcp(127.0.0.1:3306)/japchae?charset=utf8mb4&parseTime=True&loc=Local"
+	dsn := "root:password@tcp(host.docker.internal:3306)/japchae?charset=utf8mb4&parseTime=True&loc=Local"
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 
 	if err != nil {
