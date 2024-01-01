@@ -14,9 +14,12 @@ dependencies:
   rxdart: ^0.27.7
 
   sqflite: ^2.2.8+4
-  path_provider: ^0.4.1
+  path_provider: ^2.0.0-nullsafety
   http: any
   test: ^1.22.0
+
+  google_fonts: ^4.0.4
+  awesome_package: ^0.0.1
 
 dev_dependencies:
   flutter_test:
@@ -25,3 +28,9 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  fonts:
+    - family: Raleway
+      fonts:
+        - asset: packages/awesome_package/fonts/Raleway-Regular.ttf
+        - asset: packages/awesome_package/fonts/Raleway-Italic.ttf
+          style: italic
